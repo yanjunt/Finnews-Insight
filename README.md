@@ -21,7 +21,7 @@ The customer interface does not show model scores, model paths or inference time
 | Financial sentiment | `text-classification` | The saved student-fine-tuned FinBERT, configured via `SENTIMENT_MODEL` |
 | News summary | `summarization` | `sshleifer/distilbart-cnn-12-6` |
 
-The sentiment model is based on `ProsusAI/finbert`. **This application never silently substitutes the public base model for the student's fine-tuned model.** Configure a valid saved-model directory or the actual published Hugging Face repository before testing inference.
+The sentiment model is based on `ProsusAI/finbert`. **This application never silently substitutes the public base model for the student's fine-tuned model.** By default, it downloads the exact student model from the project's GitHub Release asset, validates and safely extracts it, and caches it in the Cloud runtime. A local path or a future Hugging Face repository can override this route.
 
 The sentiment classifier has three trained labels: negative, neutral and positive. `Mixed` is a heuristic presentation flag for conflicting strong predictions across article chunks; `Unclear` indicates insufficient company-specific attribution, not a trained fourth class.
 
@@ -37,22 +37,22 @@ Use Python **3.11**. The Linux deployment requirements use CPU-only PyTorch; no 
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-export SENTIMENT_MODEL=/absolute/path/to/finbert-finetuned
+export SENTIMENT_MODEL_PATH=/absolute/path/to/finbert-finetuned
 streamlit run app.py
 ```
 
-For a published model, replace the path with the actual Hugging Face Model ID. On Windows, a separate platform-appropriate PyTorch installation may be needed; the supplied pinned requirements target Linux/Streamlit Cloud.
+For a published Hugging Face model, set `SENTIMENT_MODEL` to its actual Model ID. On Windows, a separate platform-appropriate PyTorch installation may be needed; the supplied pinned requirements target Linux/Streamlit Cloud.
 
 ## Streamlit Community Cloud
 
 1. Upload the contents of this directory to the root of a GitHub repository. Preserve the `.streamlit/` folder.
 2. At `share.streamlit.io`, select **Create app** and choose the repository and `main` branch.
 3. Set the main file path to **`app.py`** and select **Python 3.11** in Advanced settings.
-4. Copy the settings from `.streamlit/secrets.example.toml` into the app's Secrets settings. Replace the model placeholder with the **actual** student-fine-tuned repository.
+4. Copy the settings from `.streamlit/secrets.example.toml` into the app's Secrets settings. The default `SENTIMENT_MODEL_URL` points to the exact student model Release asset; do not replace it with public base FinBERT.
 5. Deploy, run at least one full article through all model stages, and inspect Cloud logs if startup or inference fails.
 6. Complete the deployment-specific accuracy experiment and capture actual Cloud screenshots before claiming submission readiness.
 
-A Colab or `trycloudflare.com` preview is not the required Streamlit Cloud deployment. If the saved model is only in Google Drive, Cloud cannot read a `/content/drive/...` path. Publish the same weights to Hugging Face, or use an explicitly configured, independently verified alternative model-delivery route. A model route does not replace the coursework requirement to provide an HF Model URL.
+A Colab or `trycloudflare.com` preview is not the required Streamlit Cloud deployment. If the saved model is only in Google Drive, Cloud cannot read a `/content/drive/...` path. This version uses the independently verified GitHub Release route for the same weights. The Release route can unblock application testing, but it does not replace the coursework requirement to provide an HF Model URL; record that limitation honestly if HF publication remains unavailable.
 
 For a public model, anonymous downloading is normally supported; creating and publishing a repository still requires authorized HF access. Store any private-model token only in Cloud Secrets, never in source files.
 
@@ -68,6 +68,7 @@ All three chosen models are unchanged from the tested pipeline. Do not change th
 - `intelligence.py`: entities, evidence scope, sentiment aggregation and summary logic.
 - `news_utils.py`: extraction, token-aware chunking and label checks.
 - `model_runtime.py`: serialized, memory-conscious model lifecycle.
+- `model_delivery.py`: cached Release download, SHA-256 option, safe extraction and required-file checks.
 - `styles.css`: fixed light theme and contrast styling.
 - `.streamlit/config.toml`: application theme and file-size settings.
 - `.streamlit/secrets.example.toml`: example configuration, not actual credentials.

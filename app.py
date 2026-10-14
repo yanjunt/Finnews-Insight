@@ -12,6 +12,7 @@ import streamlit as st
 
 from intelligence import article_body
 from model_runtime import ModelRuntime, run_intelligence
+from model_delivery import ensure_model
 from news_utils import extract_file
 
 ROOT = Path(__file__).resolve().parent
@@ -35,14 +36,17 @@ def setting(name, default=None):
 
 
 def model_default():
+    configured_path = setting("SENTIMENT_MODEL_PATH")
+    if configured_path:
+        return configured_path
     configured = setting("SENTIMENT_MODEL")
     if configured:
         return configured
     for folder in ("finbert-finetuned", "distilbert_ep3", "finnews-distilbert"):
         if (ROOT / "models" / folder / "config.json").exists():
             return f"models/{folder}"
-    # Never silently replace the student's fine-tuned model with public FinBERT.
-    return "models/finbert-finetuned"
+    # The default is the same student model published in the project Release.
+    return "__github_release_model__"
 
 
 def resolve_model(value):
@@ -77,6 +81,9 @@ def analyze_article(text, model_source):
     status = st.empty()
     status.info("Preparing your news insights. Please keep this page open.")
     try:
+        if model_source == "__github_release_model__":
+            model_source = ensure_model()
+            models["sentiment"] = model_source
         result = run_intelligence(article, model_runtime(), models, progress=status.info)
         result["diagnostics"]["version"] = APP_VERSION
         logger.info("FINNEWS_DIAGNOSTICS %s", json.dumps(result["diagnostics"]))
@@ -118,7 +125,8 @@ if st.session_state.get("signature") != signature:
 
 if clicked:
     try:
-        result = analyze_article(text, resolve_model(model_id))
+        source = ensure_model() if model_id == "__github_release_model__" else resolve_model(model_id)
+        result = analyze_article(text, source)
         result["source"] = uploaded.name
         st.session_state["analysis"] = result
         st.session_state["signature"] = signature

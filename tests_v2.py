@@ -43,7 +43,7 @@ assert 'Newsroom' not in article_body('Apple reported higher revenue.\n\nSource:
 # Render populated customer results without user model weights or network calls.
 at = AppTest.from_file(str(Path(__file__).resolve().parent / 'app.py')).run(timeout=20)
 assert not at.exception
-model = os.getenv('SENTIMENT_MODEL', 'models/finbert-finetuned')
+model = os.getenv('SENTIMENT_MODEL') or os.getenv('SENTIMENT_MODEL_PATH') or '__github_release_model__'
 summary_model = os.getenv('SUMMARY_MODEL', 'sshleifer/distilbart-cnn-12-6')
 entity_model = os.getenv('ENTITY_MODEL', 'dslim/distilbert-NER')
 sig = hashlib.sha256(('' + model + summary_model + entity_model + '2.2').encode()).hexdigest()
