@@ -1,0 +1,93 @@
+/* A consistent light theme, including browsers set to prefer dark mode. */
+.stApp {
+  background: #F5F7FB !important;
+  color: #14273F !important;
+  color-scheme: light;
+  --text-color: #14273F;
+  --background-color: #F5F7FB;
+  --secondary-background-color: #FFFFFF;
+}
+[data-testid="stAppViewContainer"], [data-testid="stMain"] {
+  background: #F5F7FB !important;
+  color: #14273F !important;
+}
+[data-testid="stHeader"] { background: #F5F7FB !important; }
+.block-container { max-width: 1050px; padding-top: 2.4rem; padding-bottom: 2.4rem; }
+h1, h2, h3, h4, h5, h6 { color: #14273F !important; }
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stWidgetLabel"] p,
+[data-testid="stFileUploader"] label,
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] summary p,
+[data-testid="stText"] {
+  color: #14273F !important;
+}
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p,
+[data-testid="stFileUploader"] small {
+  color: #42526B !important;
+  opacity: 1 !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] > div,
+[data-testid="stExpander"] details {
+  border-color: #CAD4E0 !important;
+}
+[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploaderFile"] {
+  background: #EAF0F6 !important;
+  color: #14273F !important;
+}
+[data-testid="stFileUploaderDropzone"] span,
+[data-testid="stFileUploaderDropzone"] small,
+[data-testid="stFileUploaderFile"] span,
+[data-testid="stFileUploaderFile"] small {
+  color: #14273F !important;
+}
+[data-testid="stAlert"] p { color: #14273F !important; }
+[data-testid="stBaseButton-secondary"],
+[data-testid="stFileUploaderDropzone"] button {
+  color: #14273F !important;
+  background: #FFFFFF !important;
+  border-color: #93A4B9 !important;
+}
+[data-testid="stBaseButton-primary"] {
+  width: auto !important;
+  min-height: 42px;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  background: #123E5B !important;
+  border: 1px solid #123E5B !important;
+  color: #FFFFFF !important;
+}
+[data-testid="stBaseButton-primary"] p,
+[data-testid="stBaseButton-primary"] span {
+  color: #FFFFFF !important;
+}
+[data-testid="stBaseButton-primary"]:hover:not(:disabled) {
+  background: #0B2C43 !important;
+  border-color: #0B2C43 !important;
+}
+[data-testid="stBaseButton-primary"]:disabled {
+  background: #455C72 !important;
+  border-color: #455C72 !important;
+  opacity: 1 !important;
+}
+button:focus-visible, summary:focus-visible {
+  outline: 3px solid #2A719E !important;
+  outline-offset: 3px;
+}
+.fn-brand { font-size: 15px; font-weight: 700; letter-spacing: .08em; color: #1D5473; margin-bottom: 18px; }
+.fn-intro { color: #34465E; font-size: 17px; line-height: 1.65; margin-bottom: 24px; }
+.fn-label { font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em; color: #42526B; }
+.fn-company { font-size: 24px; font-weight: 650; color: #14273F; padding-top: 5px; }
+.fn-body { color: #14273F; font-size: 16px; line-height: 1.7; margin-bottom: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.fn-sentiment { display: inline-block; border-radius: 24px; padding: 7px 16px; font-size: 16px; font-weight: 600; margin-top: 8px; }
+.fn-positive { background: #E3F3EB; color: #166747; }
+.fn-negative { background: #FCE8E8; color: #9D2828; }
+.fn-neutral { background: #E7EEF8; color: #355B88; }
+.fn-mixed, .fn-unclear { background: #FFF2D9; color: #895F17; }
+@media print {
+  .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] { background: #FFFFFF !important; }
+  .fn-body, [data-testid="stMarkdownContainer"] p { color: #14273F !important; }
+}
